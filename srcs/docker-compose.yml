@@ -16,6 +16,22 @@ services:
     networks:
       - frontend
 
+  mariadb:
+    build: requirements/mariadb/
+    # image: mariadb_image
+    container_name: mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - "~/Desktop/inception/mariadb:/var/lib/mysql"
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
+      WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+      WP_DATABASE_USR: ${WP_DATABASE_USR}
+      WP_DATABASE_PWD: ${WP_DATABASE_PWD}
+
   wordpress:
     build: requirements/wordpress/
     # image: wordpress_image
@@ -35,25 +51,24 @@ services:
       WP_DATABASE_USR: ${WP_DATABASE_USR}
       WP_DATABASE_PWD: ${WP_DATABASE_PWD}
 
-  mariadb:
-    build: requirements/mariadb/
-    # image: mariadb_image
-    container_name: mariadb
-    ports:
-      - "3306:3306"
-    volumes:
-      - "~/Desktop/inception/mariadb:/var/lib/mysql"
-    networks:
-      - backend
-    environment:
-      MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
-      WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      WP_DATABASE_USR: ${WP_DATABASE_USR}
-      WP_DATABASE_PWD: ${WP_DATABASE_PWD}
-    
 
 networks:
   frontend:
     driver: bridge
   backend:
     driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/gvenet/data/db_data
+  
+  wp_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/gvenet/data/wp_data
