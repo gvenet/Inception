@@ -5,20 +5,30 @@ RUN apk add --update php7-fpm php7-json php7-zlib php7-xml php7-xmlwriter php7-s
     php7-gd php7-iconv php7-mcrypt php7-gmp php7-zip \
     php7-curl php7-opcache php7-ctype php7-apcu \
     php7-intl php7-bcmath php7-dom php7-mbstring php7-xmlreader
-RUN apk add --update wget tar bash
+
+
+RUN apk add --update \
+    wget tar \
+ 	curl bash \
+	mysql mysql-client openrc \
+	&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar  \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/bin/wp
+
 RUN rm -rf /var/cache/apk/*
 
 # php config
 COPY conf/php-fpm.conf /etc/php7/php-fpm.conf
 COPY conf/www.conf /etc/php7/php-fpm.d/www.conf
 
+WORKDIR /var/www/html/wordpress
+
 # default website
-COPY conf/index.html /tmp/index.html
-COPY conf/index.php /tmp/index.php
-COPY conf/wp-config.php /tmp/wp-config.php
+COPY conf/index.html ../
+COPY conf/index.php ../
 
-# wordpress
-RUN wget -O /tmp/latest.tar.gz https://wordpress.org/latest.tar.gz
+# configure wordpress
+COPY tools/init.sh ./
+RUN chmod 700 init.sh
 
-COPY tools/configure.sh configure.sh
-ENTRYPOINT [ "sh", "configure.sh" ]
+CMD bash init.sh
