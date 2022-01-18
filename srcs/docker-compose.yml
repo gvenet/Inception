@@ -3,7 +3,7 @@ services:
 
   nginx:
     build: requirements/nginx/
-    image: nginx_image
+    # image: nginx_image
     container_name: nginx
     ports:
       - "80:80"
@@ -18,10 +18,10 @@ services:
 
   wordpress:
     build: requirements/wordpress/
-    image: wordpress_image
+    # image: wordpress_image
     container_name: wordpress
-    # ports:
-    #   - "9000:9000"
+    ports:
+      - "9000:9000"
     volumes:
       - "~/Desktop/inception:/var/www/html"
     depends_on:
@@ -37,10 +37,10 @@ services:
 
   mariadb:
     build: requirements/mariadb/
-    image: mariadb_image
+    # image: mariadb_image
     container_name: mariadb
-    # ports:
-    #   - "3306:3306"
+    ports:
+      - "3306:3306"
     volumes:
       - "~/Desktop/inception/mariadb:/var/lib/mysql"
     networks:

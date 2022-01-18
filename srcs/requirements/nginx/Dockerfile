@@ -6,7 +6,7 @@ RUN rm -rf /var/cache/apk/*
 
 # nginx SSL
 RUN mkdir /etc/nginx/ssl
-RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/raccoman.pem -keyout /etc/nginx/ssl/raccoman.key -subj "/C=IT/ST=Rome/L=Rome/O=42 School/OU=raccoman/CN=raccoman/"
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out /etc/nginx/ssl/gvenet.pem -keyout /etc/nginx/ssl/gvenet.key -subj "/C=FR/ST=France/L=Lyon/O=42 School/OU=gvenet/CN=gvenet/"
 
 # nginx config
 RUN mkdir -p /run/nginx
