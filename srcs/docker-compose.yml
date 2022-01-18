@@ -5,7 +5,6 @@ services:
     build: requirements/nginx/
     container_name: nginx
     ports:
-      - "80:80"
       - "443:443"
     restart: on-failure
     volumes:
@@ -15,14 +14,10 @@ services:
       - mariadb
     networks:
       - frontend
-    # networks:
-    #   - default
 
   wordpress:
     build: requirements/wordpress/
     container_name: wordpress
-    ports:
-      - "9000:9000"
     restart: on-failure
     volumes:
       - wp_data:/var/www/html
@@ -31,8 +26,6 @@ services:
     networks:
       - frontend
       - backend
-    # networks:
-    #   - default
     environment:
       MYSQL_HOST: ${MYSQL_HOST}
       WP_DATABASE_NAME: ${WP_DATABASE_NAME}
@@ -42,15 +35,11 @@ services:
   mariadb:
     build: requirements/mariadb/
     container_name: mariadb
-    ports:
-      - "3306:3306"
     restart: on-failure
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - backend
-    # networks:
-    #   - default
     environment:
       MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
       WP_DATABASE_NAME: ${WP_DATABASE_NAME}
@@ -77,11 +66,3 @@ volumes:
       o: bind
       type: none
       device: /home/gvenet/data/wp_data
-
-
-
-
-# networks:
-#   default:
-#     external:
-#       name: inception_network
