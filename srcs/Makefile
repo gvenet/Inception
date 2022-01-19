@@ -34,6 +34,17 @@ purge:
 	@docker images
 	@docker ps -a
 
+status:
+	@echo
+	@docker ps -a
+	@echo
+	@docker images
+	@echo
+	@docker volume ls
+	@echo
+	@docker network ls
+	@echo
+
 ngt:
 	@echo "NGINX"
 	@docker container exec -ti nginx bash
