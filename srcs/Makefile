@@ -26,6 +26,14 @@ clear:
 	@docker images
 	@docker ps -a
 
+purge:
+	@docker stop $$(docker ps -a -q)
+	@docker rm $$(docker ps -a -q)
+	@docker image prune --all --force
+	@make -s rmv
+	@docker images
+	@docker ps -a
+
 ngt:
 	@echo "NGINX"
 	@docker container exec -ti nginx bash
