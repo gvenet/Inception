@@ -1,8 +1,11 @@
-FROM alpine:3.13
+FROM debian
 
-RUN	apk update
-RUN	apk add --no-cache --quiet --update mariadb mariadb-client bash
+RUN apt update -y && apt install mariadb-server -y
 
-COPY tools/init.sh init.sh
+RUN sed -i 's/bind-address/bind-address = 0.0.0.0 #/i' /etc/mysql/mariadb.conf.d/50-server.cnf
 
-ENTRYPOINT ["sh", "init.sh"]
+COPY tools/mySqlScript.sql /mysql_scripts/
+
+RUN /etc/init.d/mariadb start && mysql -u root --password="root" -e "source /mysql_scripts/mySqlScript.sql"
+
+CMD mysqld_safe
