@@ -16,6 +16,10 @@ rmv:
 
 restart: 
 	@make -s stop
+	@make -s start
+
+restartv: 
+	@make -s stop
 	@make -s rmv
 	@make -s start
 
