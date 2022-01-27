@@ -1,1 +1,3 @@
 SELECT COUNT(c.comment_date) FROM wp_comments as c where hour(timediff( localtime(), c.comment_date ) ) < 4;
+
+https://github.com/federico-razzoli/docker-mariadb-alpine/tree/master/mariadb_conf
