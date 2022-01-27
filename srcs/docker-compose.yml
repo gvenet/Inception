@@ -18,7 +18,16 @@ services:
       - frontend
 
   wordpress:
-    build: requirements/wordpress/
+    build: 
+      context: requirements/wordpress/
+      args:
+        MYSQL_HOST: ${MYSQL_HOST}
+        WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+        WP_DATABASE_USR: ${WP_DATABASE_USR}
+        WP_DATABASE_PWD: ${WP_DATABASE_PWD}  
+        WP_ADMIN_USR: ${WP_ADMIN_USR}
+        WP_ADMIN_PWD: ${WP_ADMIN_PWD}
+        WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
     container_name: wordpress
     restart: on-failure
     env_file:
@@ -35,9 +44,18 @@ services:
       WP_DATABASE_NAME: ${WP_DATABASE_NAME}
       WP_DATABASE_USR: ${WP_DATABASE_USR}
       WP_DATABASE_PWD: ${WP_DATABASE_PWD}
+      WP_ADMIN_USR: ${WP_ADMIN_USR}
+      WP_ADMIN_PWD: ${WP_ADMIN_PWD}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
 
   mariadb:
-    build: requirements/mariadb/
+    build: 
+      context: requirements/mariadb/
+      args:
+        MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
+        WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+        WP_DATABASE_USR: ${WP_DATABASE_USR}
+        WP_DATABASE_PWD: ${WP_DATABASE_PWD}
     container_name: mariadb
     restart: on-failure
     env_file:
@@ -51,6 +69,7 @@ services:
       WP_DATABASE_NAME: ${WP_DATABASE_NAME}
       WP_DATABASE_USR: ${WP_DATABASE_USR}
       WP_DATABASE_PWD: ${WP_DATABASE_PWD}
+
 
 networks:
   frontend:

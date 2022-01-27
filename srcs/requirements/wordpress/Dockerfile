@@ -9,11 +9,11 @@ RUN apk add --update php7-fpm php7-json php7-zlib php7-xml php7-xmlwriter php7-s
 
 RUN apk add --update \
     wget tar \
- 	curl bash \
-	mysql mysql-client openrc \
-	&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar  \
-	&& chmod +x wp-cli.phar \
-	&& mv wp-cli.phar /usr/bin/wp
+ 		curl bash \
+		mysql mysql-client openrc \
+		&& curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar  \
+		&& chmod +x wp-cli.phar \
+		&& mv wp-cli.phar /usr/bin/wp
 
 RUN rm -rf /var/cache/apk/*
 
