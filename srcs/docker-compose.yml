@@ -70,24 +70,26 @@ services:
       WP_DATABASE_USR: ${WP_DATABASE_USR}
       WP_DATABASE_PWD: ${WP_DATABASE_PWD}
 
-
+# https://docs.docker.com/network/bridge/
 networks:
   frontend:
     driver: bridge
   backend:
     driver: bridge
 
-volumes:
+# https://stackoverflow.com/questions/35841241/docker-compose-named-mounted-volume 
+# https://qastack.fr/programming/40905761/how-do-i-mount-a-host-directory-as-a-volume-in-docker-compose
+volumes: 
   db_data:
     driver: local
     driver_opts:
+      type: none #https://stackoverflow.com/questions/59836742/docker-driver-opts-type-none/59837131#59837131
       o: bind
-      type: none
       device: /home/gvenet/data/db_data
   
   wp_data:
     driver: local
     driver_opts:
-      o: bind
       type: none
+      o: bind
       device: /home/gvenet/data/wp_data
