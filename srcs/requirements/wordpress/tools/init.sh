@@ -10,7 +10,7 @@ wp core config \
 	--dbhost=$MYSQL_HOST:3306
 
 wp core install \
-	--url=localhost \
+	--url=gvenet.42.fr \
 	--title=inception \
 	--admin_user=$WP_ADMIN_USR \
 	--admin_password=$WP_ADMIN_PWD \

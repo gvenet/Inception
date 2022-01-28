@@ -24,8 +24,8 @@ COPY conf/www.conf /etc/php7/php-fpm.d/www.conf
 WORKDIR /var/www/html/wordpress
 
 # default website
-COPY conf/index.html ../
-COPY conf/index.php ../
+# COPY conf/index.html ../
+# COPY conf/index.php ../
 
 # configure wordpress
 COPY tools/init.sh ./

@@ -3,10 +3,10 @@
 start:
 	@mkdir -p /home/gvenet/data/db_data
 	@mkdir -p /home/gvenet/data/wp_data
-	@docker-compose up -d --build
+	@docker-compose -f /home/gvenet/share/inception/srcs/docker-compose.yml up -d --build
 
 stop:
-	@docker-compose down
+	@docker-compose -f /home/gvenet/share/inception/srcs/docker-compose.yml down
 
 rmv:
 	@docker volume prune --force
@@ -24,30 +24,21 @@ restartv:
 	@make -s start
 
 clear:
-	@docker-compose down --remove-orphans
+	@docker-compose -f /home/gvenet/share/inception/srcs/docker-compose.yml down --remove-orphans
 	@docker image prune --all --force
 	@make -s rmv
-	@docker images
-	@docker ps -a
 
 purge:
 	@docker stop $$(docker ps -a -q)
 	@docker rm $$(docker ps -a -q)
 	@docker image prune --all --force
 	@make -s rmv
-	@docker images
-	@docker ps -a
 
 status:
-	@echo
 	@docker ps -a
-	@echo
 	@docker images
-	@echo
 	@docker volume ls
-	@echo
 	@docker network ls
-	@echo
 
 ngt:
 	@echo "NGINX"
