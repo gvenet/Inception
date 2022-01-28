@@ -1,6 +1,7 @@
 .PHONY: start stop
 
 start:
+	@sed -i 's/localhost/gvenet.42.fr/i' /etc/hosts
 	@mkdir -p /home/gvenet/data/db_data
 	@mkdir -p /home/gvenet/data/wp_data
 	@docker-compose --project-directory srcs -f srcs/docker-compose.yml up -d --build

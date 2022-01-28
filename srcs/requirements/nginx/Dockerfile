@@ -1,6 +1,6 @@
 FROM alpine:3.13
 
-RUN apk add --update nginx openssl bash
+RUN apk add --update nginx openssl
 
 RUN rm -rf /var/cache/apk/*
 

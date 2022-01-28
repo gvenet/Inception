@@ -1,0 +1,2 @@
+SELECT COUNT(c.comment_date) FROM wp_comments as c where hour(timediff( localtime(), c.comment_date ) ) < 4;
+

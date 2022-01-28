@@ -83,13 +83,13 @@ volumes:
   db_data:
     driver: local
     driver_opts:
-      type: none #https://stackoverflow.com/questions/59836742/docker-driver-opts-type-none/59837131#59837131
       o: bind
+      type: none #https://stackoverflow.com/questions/59836742/docker-driver-opts-type-none/59837131#59837131
       device: /home/gvenet/data/db_data
   
   wp_data:
     driver: local
     driver_opts:
-      type: none
       o: bind
+      type: none
       device: /home/gvenet/data/wp_data
