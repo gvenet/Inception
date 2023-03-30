@@ -1,95 +1,91 @@
-version: '3'
+version: "3"
 services:
+   nginx:
+      build: requirements/nginx/
+      container_name: nginx
+      ports:
+         - "443:443"
+      restart: on-failure
+      env_file:
+         - .env
+      volumes:
+         - wp_data:/var/www/html
+      depends_on:
+         - wordpress
+         - mariadb
+      networks:
+         - frontend
 
-  nginx:
-    build: requirements/nginx/
-    container_name: nginx
-    ports:
-      - "443:443"
-    restart: on-failure
-    env_file:
-      - .env
-    volumes:
-      - wp_data:/var/www/html
-    depends_on:
-      - wordpress
-      - mariadb
-    networks:
-      - frontend
+   wordpress:
+      build:
+         context: requirements/wordpress/
+         args:
+            MYSQL_HOST: ${MYSQL_HOST}
+            WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+            WP_DATABASE_USR: ${WP_DATABASE_USR}
+            WP_DATABASE_PWD: ${WP_DATABASE_PWD}
+            WP_ADMIN_USR: ${WP_ADMIN_USR}
+            WP_ADMIN_PWD: ${WP_ADMIN_PWD}
+            WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+      container_name: wordpress
+      restart: on-failure
+      env_file:
+         - .env
+      volumes:
+         - wp_data:/var/www/html
+      depends_on:
+         - mariadb
+      networks:
+         - frontend
+         - backend
+      environment:
+         MYSQL_HOST: ${MYSQL_HOST}
+         WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+         WP_DATABASE_USR: ${WP_DATABASE_USR}
+         WP_DATABASE_PWD: ${WP_DATABASE_PWD}
+         WP_ADMIN_USR: ${WP_ADMIN_USR}
+         WP_ADMIN_PWD: ${WP_ADMIN_PWD}
+         WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
 
-  wordpress:
-    build: 
-      context: requirements/wordpress/
-      args:
-        MYSQL_HOST: ${MYSQL_HOST}
-        WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-        WP_DATABASE_USR: ${WP_DATABASE_USR}
-        WP_DATABASE_PWD: ${WP_DATABASE_PWD}  
-        WP_ADMIN_USR: ${WP_ADMIN_USR}
-        WP_ADMIN_PWD: ${WP_ADMIN_PWD}
-        WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
-    container_name: wordpress
-    restart: on-failure
-    env_file:
-      - .env
-    volumes:
-      - wp_data:/var/www/html
-    depends_on:
-      - mariadb
-    networks:
-      - frontend
-      - backend
-    environment:
-      MYSQL_HOST: ${MYSQL_HOST}
-      WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      WP_DATABASE_USR: ${WP_DATABASE_USR}
-      WP_DATABASE_PWD: ${WP_DATABASE_PWD}
-      WP_ADMIN_USR: ${WP_ADMIN_USR}
-      WP_ADMIN_PWD: ${WP_ADMIN_PWD}
-      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+   mariadb:
+      build:
+         context: requirements/mariadb/
+         args:
+            MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
+            WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+            WP_DATABASE_USR: ${WP_DATABASE_USR}
+            WP_DATABASE_PWD: ${WP_DATABASE_PWD}
+      container_name: mariadb
+      restart: on-failure
+      env_file:
+         - .env
+      volumes:
+         - db_data:/var/lib/mysql
+      networks:
+         - backend
+      environment:
+         MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
+         WP_DATABASE_NAME: ${WP_DATABASE_NAME}
+         WP_DATABASE_USR: ${WP_DATABASE_USR}
+         WP_DATABASE_PWD: ${WP_DATABASE_PWD}
 
-  mariadb:
-    build: 
-      context: requirements/mariadb/
-      args:
-        MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
-        WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-        WP_DATABASE_USR: ${WP_DATABASE_USR}
-        WP_DATABASE_PWD: ${WP_DATABASE_PWD}
-    container_name: mariadb
-    restart: on-failure
-    env_file:
-      - .env    
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - backend
-    environment:
-      MYSQL_ROOT_PWD: ${MYSQL_ROOT_PWD}
-      WP_DATABASE_NAME: ${WP_DATABASE_NAME}
-      WP_DATABASE_USR: ${WP_DATABASE_USR}
-      WP_DATABASE_PWD: ${WP_DATABASE_PWD}
-
-# https://docs.docker.com/network/bridge/
 networks:
-  frontend:
-    driver: bridge
-  backend:
-    driver: bridge
+   frontend:
+      driver: bridge
+   backend:
+      driver: bridge
 
-# https://stackoverflow.com/questions/35841241/docker-compose-named-mounted-volume 
-# https://qastack.fr/programming/40905761/how-do-i-mount-a-host-directory-as-a-volume-in-docker-compose
-volumes: 
-  db_data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none #https://stackoverflow.com/questions/59836742/docker-driver-opts-type-none/59837131#59837131
-      device: /home/gvenet/data/db_data
-  
-  wp_data:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: /home/gvenet/data/wp_data
+volumes:
+   db_data:
+      driver: local
+      driver_opts:
+         o: bind
+         type: none
+         device: ${VOLUME_PATH}db_data
+
+   wp_data:
+      driver: local
+      driver_opts:
+         o: bind
+         type: none
+         device: ${VOLUME_PATH}wp_data

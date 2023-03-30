@@ -1,9 +1,8 @@
 .PHONY: start stop
 
 start:
-	@sed -i 's/localhost/gvenet.42.fr/i' /etc/hosts
-	@mkdir -p /home/gvenet/data/db_data
-	@mkdir -p /home/gvenet/data/wp_data
+	@mkdir -p /Users/imac/Prog/Inception/data/db_data
+	@mkdir -p /Users/imac/Prog/Inception/data/wp_data
 	@docker-compose --project-directory srcs -f srcs/docker-compose.yml up -d --build
 
 stop:
@@ -11,8 +10,9 @@ stop:
 
 rmv:
 	@docker volume prune --force
+	@rm -rf /Users/imac/Prog/Inception/data
 	@docker volume rm srcs_db_data srcs_wp_data
-	@rm -rf /home/gvenet/data
+	
 
 restart: 
 	@make -s stop
@@ -29,19 +29,20 @@ clear:
 	@make -s rmv
 
 purge:
-	@docker stop $$(docker ps -a -q)
-	@docker rm $$(docker ps -a -q)
+	@docker system prune --all --force
 	@docker image prune --all --force
 	@make -s rmv
+	@docker stop $$(docker ps -a -q)
+	@docker rm $$(docker ps -a -q)
 
 status:
 	@docker ps -a
-	@docker images
+	@docker images -a
 	@docker volume ls
 	@docker network ls
 
 ngt:
-	@docker container exec -ti nginx bash
+	@docker container exec -ti nginx sh
 
 wpt:
 	@docker container exec -ti wordpress bash
